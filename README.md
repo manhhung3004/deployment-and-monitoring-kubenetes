@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kubernetes Cluster Implementation and Application Deployment</title>
 </head>
 <body>
     <h1>Kubernetes Cluster Implementation and Application Deployment</h1>
@@ -86,11 +85,13 @@
     <p>Ensure that you have Kubernetes, Docker, and necessary tools installed on your system. Configure VMware with the required resources to set up the master and worker nodes.</p>
     <h3>Conclusion:</h3>
     <p>This project provides a comprehensive example of deploying a microservices application on a Kubernetes cluster, with a focus on scalability, monitoring, and efficient data exchange between services using Apache Kafka.</p>
-    <h3>Images:</h3>
-    <p>Include any relevant images here to illustrate the project:</p>
+    <h3>preview:</h3>
+    <p></p>
     <ul>
-        <li><img src="/images/targets_of_prometheus.png.png" alt="Targets of prometheus"></li>
-        <!-- <li><img src="path/to/your/image2.png" alt="Description of image 2"></li> -->
+        <li>Prometheus<img src="./images/prometheus.png" alt="Description of image 2">
+        <img src="./images/targets_of_prometheus.png" alt="Targets of prometheus">
+        </li>
+        <li>Grafana<img src="./images/grafana.png" alt="Description of image 2"></li>
     </ul>
 </body>
 </html>

@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nexus-ingressroute
+  namespace: nexus
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host('localhost.tdhglobal.com`)
+      kind: Rule
+      services:
+        - name: nexus-service
+          port: 8083
+

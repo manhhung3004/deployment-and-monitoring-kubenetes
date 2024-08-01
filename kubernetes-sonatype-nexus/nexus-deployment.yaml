@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus
+  namespace: nexus-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus-server
+  template:
+    metadata:
+      labels:
+        app: nexus-server
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: dev.2.prod
+      securityContext:
+        fsGroup: 2000           # Set the group ID for volumes
+      initContainers:
+        - name: init-permissions
+          image: busybox
+          command: ['sh', '-c', 'mkdir -p /nexus-data/log /nexus-data/tmp /nexus-data/instances && chown -R 1000:3000 /nexus-data && chmod -R 755 /nexus-data']
+          volumeMounts:
+            - name: nexus-data
+              mountPath: /nexus-data
+          securityContext:      
+            runAsUser: 0        # Run as root to set permissions
+            capabilities:
+              add: ["DAC_OVERRIDE"]
+      containers:
+        - name: nexus
+          image: sonatype/nexus3:3.70.1-java11-alpine
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: "5Gi"
+              cpu: "1000m"
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8081
+          volumeMounts:
+            - name: nexus-data
+              mountPath: /nexus-data
+          securityContext:      
+            runAsUser: 1000     # Run as a non-root user
+            runAsGroup: 3000    # Set group ID for the user
+            readOnlyRootFilesystem: false # Allow writing to the filesystem
+      volumes:
+        - name: nexus-data
+          persistentVolumeClaim:
+            claimName: nexus-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nexus-pvc
+  namespace: nexus-server
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
